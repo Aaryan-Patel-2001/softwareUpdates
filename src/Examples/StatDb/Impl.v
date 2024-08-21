@@ -22,6 +22,15 @@ Module Var.
     | Count => fun '(x, _) => (x, v)
     end.
 
+  Print reads.
+
+  About reads.
+  About puts.
+
+  Print puts.
+
+  Print set. 
+
   Definition dynamics : Dynamics Op State :=
     {| step T (op: Op T) :=
          match op with
@@ -57,6 +66,8 @@ Module DB.
        sem := dynamics;
        initP := fun s => s = nil |}.
 End DB.
+
+Print Var.Read. 
 
 Definition read i := Call (Var.Read i).
 Definition write i v := Call (Var.Write i v).

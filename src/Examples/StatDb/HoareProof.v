@@ -196,23 +196,40 @@ Ltac newstep :=
 Lemma add_cok n :
   proc_hspec Var.dynamics (impl.(compile_op) (DB.Add n)) (add_hspec n).
 Proof.
-  repeat newstep; auto.
-  destruct state0; simpl; auto.
+  simpl. step_bind.
+  - repeat step_bind.
+    + step_ret.
+      { auto. destruct state0.
+        * simpl. auto. }
+      { auto. }
+    + auto.
+    + auto.
+    + auto.
+    + auto.
+    + auto.
+    + auto.
+  -  auto.
+  - auto. 
 Qed.
 
 Lemma avg_cok :
   proc_hspec Var.dynamics (impl.(compile_op) (DB.Avg)) (avg_hspec).
-Proof.
+Proof. 
   repeat newstep; auto.
 Qed.
 
 Lemma add_ok n :
   proc_rspec Var.dynamics (impl.(compile_op) (DB.Add n)) impl.(recover) (add_rspec n).
-Proof. eapply proc_hspec_to_rspec; [ eapply add_cok |..]; eauto. intros []; eauto. Qed.
+Proof. 
+  eapply proc_hspec_to_rspec; [ eapply add_cok |..]; eauto. intros []; eauto. Qed.
 
 Lemma avg_ok :
   proc_rspec Var.dynamics (impl.(compile_op) (DB.Avg)) impl.(recover) (avg_rspec).
 Proof. eapply proc_hspec_to_rspec; [ eapply avg_cok |..]; eauto. intros []; eauto. Qed.
+
+Print LayerRefinement.
+Print compile_op_refines_step. 
+Print  recovery_refines_crash_step. 
 
 Global Hint Resolve add_ok avg_ok init_cok : core.
 
