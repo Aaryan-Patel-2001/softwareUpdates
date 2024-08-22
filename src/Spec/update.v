@@ -57,7 +57,7 @@ Theorem updateOP : forall (T:Type) (op: Op1 T) (M1 : LayerImpl Op Op1) (M2 : Lay
 Proof.
   Admitted. 
 
-Theorem compatibleUpdateProof1: forall (M1 : LayerImpl Op Op1) (M2 : LayerImpl Op Op1) (R1: relation LA1.(State) Lc.(State) unit) (R2: relation LA1.(State) Lc.(State) unit), compatibleUpdate M1 M2 R1 R2.
+Theorem compatibleUpdateInductive: forall (M1 : LayerImpl Op Op1) (M2 : LayerImpl Op Op1) (R1: relation LA1.(State) Lc.(State) unit) (R2: relation LA1.(State) Lc.(State) unit), compatibleUpdate M1 M2 R1 R2.
 Proof.
   intros. unfold compatibleUpdate. induction p.
   - apply updateOP. 
@@ -89,16 +89,25 @@ Qed.
 Print Layer.
 
 Definition CompatibleUpdateWithoutAbsr  (M1 : LayerImpl Op Op1) (M2 : LayerImpl Op Op1) :=
-  forall (T:Type) (p1 p2: proc Op1 T), forall (s s' s'' c'': Lc.(State)) (r r1 r2: T),
+  forall (T:Type) (p1 p2: proc Op1 T), forall (s s' c'': Lc.(State)) (r r1: T),
   Lc.(initP) (s) /\ (exec Lc.(sem) (compile M1 p1)) (s) (s') (r) /\
-  shutdown (s') (s') (tt) /\  (exec Lc.(sem) (compile M1 p2)) (s') (s'') (r1) /\
-  (exec Lc.(sem) (compile M2 p2)) (s') (c'') (r2) ->
+  shutdown (s') (s') (tt)  /\
+  (exec Lc.(sem) (compile M2 p2)) (s') (c'') (r1) ->
+  exists (s'':Lc.(State)) (r2: T),  (exec Lc.(sem) (compile M1 p2)) (s') (s'') (r2) /\ 
   r1 = r2 . 
+
+Theorem CUAbsrImpliesWithoutAbsr : forall (M1 : LayerImpl Op Op1) (M2 : LayerImpl Op Op1) (R1: relation LA1.(State) Lc.(State) unit) (R2: relation LA1.(State) Lc.(State) unit), compatibleUpdate M1 M2 R1 R2 -> CompatibleUpdateWithoutAbsr M1 M2.
+Proof.
+  intros.
+  Admitted. 
 
 Theorem CompatibleUpdateWithoutAbsrInductive : forall (M1 : LayerImpl Op Op1) (M2 : LayerImpl Op Op1),
   CompatibleUpdateWithoutAbsr M1 M2.
 Proof.
-  intros. unfold CompatibleUpdateWithoutAbsr. intros.
+  intros. unfold CompatibleUpdateWithoutAbsr. intros. induction p2.
+  - admit.
+  - admit.
+  - 
   Admitted. 
   
 
@@ -116,7 +125,6 @@ Proof.
   intros. destruct H as [H1 H2 ]. unfold HoareTriple. intros. 
   unfold HoareTriple in H1. specialize H1 with s s' r.
   unfold compatibleUpdate in H2.
-  specialize H2 with T z s s' s LA1.(State) r.
   Admitted. 
 
 

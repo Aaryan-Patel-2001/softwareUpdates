@@ -332,7 +332,7 @@ Proof.
            **** destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.
           **** destruct H as [o2 [y1 H]]. unfold reads in H. destruct H as [H1 H]. destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.
        *** destruct H as [o2 [y1 H]]. unfold reads in H. unfold con.get in H. destruct H as [H6 H]. destruct H.
-           **** destruct H. {destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.} {destruct H. destruct H. destruct H as [H5 H]. destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.}
+           **** destruct H. { destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.} { destruct H. destruct H. destruct H as [H5 H]. destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.}
            ****  destruct H. destruct H. destruct H as [H5 H]. destruct H3 as [H3 H4]. rewrite -> H in H3. inversion H3. reflexivity.
    ** 
 Admitted.
